@@ -5,9 +5,40 @@
 
 const caesarModule = (function () {
   // you can add any code you want within this function scope
+  
+  function shiftChar(char, shift){
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const index = alphabet.indexOf(char.toLowerCase());
+    if (index < 0) {
+      return char;
+    } else if (index + shift > 25) {
+      return alphabet[index + shift - 26];
+    } else if (index + shift < 0) {
+      return alphabet[index + shift + 26];
+    } else {
+      return alphabet[index + shift];
+    }
+  };
 
   function caesar(input, shift, encode = true) {
     // your solution code here
+    if(!shift || shift > 25 || shift < -25){
+      return false;
+    }
+
+    let newShift = shift;
+    if (!encode){
+      newShift = shift * -1;
+    } 
+
+    let result = [];
+    for(const ch in input){
+      
+      result.push(shiftChar(input[ch], newShift));
+      // console.log(`ch: ${input[ch]}, shifted: ${shiftChar(input[ch], newShift)}, result: ${result}`);
+    } 
+
+    return result.join('');
   }
 
   return {
