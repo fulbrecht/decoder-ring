@@ -40,6 +40,7 @@ const polybiusModule = (function () {
       if( grid[row].includes(ch)){
         coord.push(grid[row].indexOf(ch) + 1);
         coord.push(parseInt(row) + 1);
+        break;
         //console.log(`row: ${row}, col: ${grid[row].indexOf(ch)}`);
       }
     }
@@ -47,20 +48,53 @@ const polybiusModule = (function () {
 
   }
 
+  function getPairs(input){
+    let result = [];
+    let pair = "";
+    for(let i = 0; i < input.length; i++){
+      if(input[i] === " "){
+        result.push(" ");
+      }
+      else if(pair.length === 0){
+        pair += input[i];
+      }
+      else if(pair.length === 1){
+        pair += input[i];
+        result.push(pair);
+        pair = "";
+      }
+    }
+
+    return result;
+  }
+
   function polybius(input, encode = true) {
     // your solution code here
     let result = [];
-
+    
     //encoding
     if(encode){
+
       for(const ch in input){
-        result.push(encodeChar(input[ch]));
+        result.push(encodeChar(input[ch].toLowerCase()));
         // console.log(`ch: ${input[ch]}, result: ${result}`)
       };
     }
+    //decoding
     else {
-      for(const ch in input){
-        result.push(decodePair(input[ch]));
+      //return false if odd
+      if(input.replace(" ", "").length % 2){
+        return false;
+      }
+      const pairedCode = getPairs(input);
+      for(const pair in pairedCode){
+        if(pairedCode[pair] === " "){
+          result.push(" ");
+        }
+        else{
+          const decoded = decodePair(pairedCode[pair][0], pairedCode[pair][1]);
+          result.push(decoded);
+        }
       };
     };
 
